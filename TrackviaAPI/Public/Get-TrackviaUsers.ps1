@@ -22,7 +22,7 @@ function Get-TrackviaUsers {
         .PARAMETER Key
             API Key from Trackvia Account under API Access.
         .PARAMETER BaseUrl
-            Base URL for your account's Trackvia Access. 
+            Base URL for your account's Trackvia Access.
             Default:
             https://go.trackvia.com/openapi
             Custom:
@@ -41,14 +41,16 @@ function Get-TrackviaUsers {
         .EXAMPLE
             Get-TrackviaUsers -Bearer $Bearer -Key $Key -UsersPerPage 500
             Retrieves the newest 500 users.
-            
+
     #>
     [CmdletBinding()]
     param (
         [Parameter()]
-        [securestring] $Bearer,
-        [string] $Key,
-        [string] $BaseUrl,
+        [securestring] $Bearer=$ApiVariables.AdminBearer,
+        [Parameter()]
+        [string] $Key=$ApiVariables.Key,
+        [Parameter()]
+        [string] $BaseUrl=$ApiVariables.BaseUrl,
         [Int32] $UsersPerPage,
         [Int32] $PageNumber
     )
@@ -71,7 +73,7 @@ function Get-TrackviaUsers {
             Write-Error 'Access Denied, this function requires a SuperAdmin Bearer Token.'
         }
         elseif ($_.code -eq "400") {
-            Write-Error 'Bad Request, either incorrect parameters or Trackvia is unreachable.'
+            Write-Error 'Bad Request, either incorrect parameters or Trackvia is unreachable. You can set your Key and Token for your session using Set-TrackviaKey and Set-TrackviaToken.'
         }
         elseif ($_.code -eq "404") {
             Write-Error 'Not Found, Your account was not found.'
