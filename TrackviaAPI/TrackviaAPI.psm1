@@ -1,3 +1,11 @@
+#Script Scope Variables
+$ApiVariables = @{
+    BaseUrl = 'https://go.trackvia.com/openapi'
+    Bearer = $null
+    AdminBearer = $null
+    Key = $null
+}
+New-Variable -Name ApiVariables -Value $ApiVariables -Scope Script -Force
 # Dot source public/private functions
 $public  = @(Get-ChildItem -Path (Join-Path -Path $PSScriptRoot -ChildPath 'Public/*.ps1')  -Recurse -ErrorAction Stop)
 $private = @(Get-ChildItem -Path (Join-Path -Path $PSScriptRoot -ChildPath 'Private/*.ps1') -Recurse -ErrorAction Stop)

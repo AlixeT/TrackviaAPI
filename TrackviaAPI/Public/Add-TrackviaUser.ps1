@@ -3,7 +3,7 @@ function Add-TrackviaUser {
         .SYNOPSIS
             Get a list of Objects that include the information in the Manage Users view on Trackvia.
         .DESCRIPTION
-            This function wraps the Post request for users from the Trackvia API. This requires a SuperAdmin API user to call. 
+            This function wraps the Post request for users from the Trackvia API. This requires a SuperAdmin API user to call.
         .LINK
             https://developer.trackvia.com/api-development/swagger
             https://github.com/AlixeT/TrackviaAPI
@@ -21,7 +21,7 @@ function Add-TrackviaUser {
         .PARAMETER Key
             API Key from Trackvia Account under API Access.
         .PARAMETER BaseUrl
-            Base URL for your account's Trackvia Access. 
+            Base URL for your account's Trackvia Access.
             Default:
             https://go.trackvia.com/openapi
             Custom:
@@ -35,16 +35,16 @@ function Add-TrackviaUser {
         .PARAMETER TimeZone
             Optional string to add TimeZone to user.
 
-            
+
     #>
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
-        [securestring] $Bearer,
-        [Parameter(Mandatory=$true)]
-        [string] $Key,
         [Parameter()]
-        [string] $BaseUrl='https://go.trackvia.com/openapi',
+        [securestring] $Bearer=$ApiVariables.AdminBearer,
+        [Parameter()]
+        [string] $Key=$ApiVariables.Key,
+        [Parameter()]
+        [string] $BaseUrl=$ApiVariables.BaseUrl,
         [Parameter(Mandatory=$true)]
         [string] $UserEmail,
         [Parameter(Mandatory=$true)]
@@ -73,7 +73,10 @@ function Add-TrackviaUser {
         return $response
     }
     catch{
-        if ($_.code -eq "409"){
+        if ($_.code -eq "401"){
+            Write-Error 'Access Denied, this function requires a SuperAdmin Bearer Token. See Set-TrackviaToken.'
+        }
+        elseif ($_.code -eq "409"){
             Write-Error 'Conflict, User Email is probably already used. Check Manage Users view in your Trackvia Account.'
         }
         elseif ($_.code -eq "400") {
